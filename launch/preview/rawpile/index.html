@@ -7,10 +7,10 @@
 <meta name="description" content="Cutsway edits gaming videos, streams, shorts and podcasts, fast: hooks that hold, shorts for every platform, posted on schedule. Book a call.">
 <meta name="theme-color" content="#07070a">
 <link rel="canonical" href="https://cutsway.com/">
-<link rel="icon" href="./shared/favicon.ico" sizes="48x48">
-<link rel="icon" href="./shared/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./shared/apple-touch-icon.png">
-<link rel="manifest" href="./shared/site.webmanifest">
+<link rel="icon" href="./shared/favicon.ico?v=2eb49b6d" sizes="48x48">
+<link rel="icon" href="./shared/favicon.svg?v=9db0ee7e" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./shared/apple-touch-icon.png?v=921760e5">
+<link rel="manifest" href="./shared/site.webmanifest?v=15c6dd0a">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cutsway">
 <meta property="og:title" content="Cutsway · Video editing for gaming creators">
@@ -48,8 +48,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./shared/page.css">
-<link rel="stylesheet" href="./shared/brand.css">
+<link rel="stylesheet" href="./shared/page.css?v=a5b362df">
+<link rel="stylesheet" href="./shared/brand.css?v=7ffc1462">
 <style>
   /* the poster, when there is no 3D (no WebGL, data saver, a blocked CDN); set here so the url resolves next to this page */
   .no-webgl body { background: linear-gradient(to top, rgb(7 7 10 / 0.7), transparent 55%), url(poster.jpg) center / cover fixed, var(--night); }
@@ -189,18 +189,18 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="./shared/site-config.js"></script>
-<script src="./shared/page.js"></script>
-<script src="./shared/ui.js"></script>
+<script src="./shared/site-config.js?v=b751a288"></script>
+<script src="./shared/page.js?v=6d3595d0"></script>
+<script src="./shared/ui.js?v=6a39ddc0"></script>
 <script type="importmap">
   { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
 </script>
 <script type="module">
   import * as THREE from 'three';
-  import { createWorld, chapterTracker, reduce, phone, ease, clamp01, canvasTex, drawGame, font, dotTexture, fontsReady } from './shared/kit.js';
-  import { specAt, specGradient, drawLogo, LOGO, BG, YELLOW, ORANGE, RED, CYAN, BLUE, PAPER, GAME_BRAND } from './shared/brand.js';
-  import { PLATFORM_KEYS, drawPostCard } from './shared/platforms.js';
-  import { loadThumbs, reelVideo, keepPlaying, REEL } from './shared/work.js';
+  import { createWorld, chapterTracker, reduce, phone, ease, clamp01, canvasTex, drawGame, font, dotTexture, fontsReady } from './shared/kit.js?v=415acb47';
+  import { specAt, specGradient, drawLogo, LOGO, BG, YELLOW, ORANGE, RED, CYAN, BLUE, PAPER, GAME_BRAND } from './shared/brand.js?v=1817101b';
+  import { PLATFORM_KEYS, drawPostCard } from './shared/platforms.js?v=56c2c6ce';
+  import { loadThumbs, reelVideo, keepPlaying, REEL } from './shared/work.js?v=bf40ed92';
 
   const world = createWorld({ bloom: [0.5, 0.5, 0.88], fov: 38, bg: BG });
   const { scene, camera } = world;

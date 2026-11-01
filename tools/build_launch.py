@@ -7,7 +7,7 @@ Each output folder is self-contained: index.html at the root, shared/ and assets
 plus robots.txt, sitemap.xml, a 404 page and cache headers. Edit shared/site-config.js in the
 output (or in prototypes/shared before building) to set the booking link, email and socials.
 """
-import datetime, html as htmllib, json, re, shutil, sys
+import datetime, hashlib, html as htmllib, json, re, shutil, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -146,6 +146,11 @@ def build(name):
     html = html.replace('../shared/', './shared/').replace('../assets/', './assets/')
     html = html.replace('../awwwards/_shared/img/', './assets/img/')
     html = add_faq_schema(bake_links(html))
+    # the CDN and browsers keep shared files for days: a content hash in each URL makes an update fetch only what changed,
+    # and never pairs a new page with an old stylesheet
+    for f in SHARED:
+        v = hashlib.md5((PROTO / 'shared' / f).read_bytes()).hexdigest()[:8]
+        html = re.sub(rf"(\./shared/{re.escape(f)})(?=[\"'])", rf'\g<1>?v={v}', html)
     left = re.findall(r'\.\./[\w/._-]+', html)
     assert not left, f'{name}: paths still point outside the site: {left}'
     (dst / 'index.html').write_text(html, encoding='utf-8')
