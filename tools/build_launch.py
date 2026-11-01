@@ -18,13 +18,15 @@ DOMAIN = 'https://cutsway.com'
 INDEXNOW_KEY = '2fb9768b8df264a3b35a01701eda6b17'
 
 SHARED = ['page.css', 'brand.css', 'site-config.js', 'page.js', 'ui.js', 'kit.js', 'brand.js', 'platforms.js', 'work.js',
-          'favicon.svg', 'favicon.ico', 'logo.svg', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest']
+          'favicon.svg', 'favicon.ico', 'logo.svg', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest', 'pages.css']
 # Cutsway's own work (thumbnails, the reel), shown inside the worlds
 WORK = lambda *names: {f'assets/work/{n}': f'assets/work/{n}' for n in names}
 THUMBS = [f'thumb-{k}.jpg' for k in ('wealthy', 'stocks', 'creator', 'rawtalks', 'rawtalks-plain')]
 PAGES = {
     'nightshift': {'files': ['editor.js', 'og.jpg', 'poster.jpg'], 'assets': {'assets/models/editor.glb': 'assets/models/editor.glb', **WORK(*THUMBS[:4], 'reel-podcast-sm.mp4')}},
-    'rawpile': {'files': ['og.jpg', 'poster.jpg'], 'assets': WORK(*THUMBS, 'raw-frames.jpg', 'reel-podcast.mp4', 'reel-podcast-sm.mp4')},
+    # rawpile is the live site at cutsway.com: it also gets the plain service and work pages (tools/site_pages.py)
+    'rawpile': {'files': ['og.jpg', 'poster.jpg'], 'subpages': True,
+                'assets': WORK(*THUMBS, 'raw-frames.jpg', 'reel-podcast.mp4', 'reel-podcast-sm.mp4', 'reel-podcast-poster.jpg')},
 }
 
 NOT_FOUND = '''<!doctype html>
@@ -162,17 +164,30 @@ def build(name):
     assert not left, f'{name}: paths still point outside the site: {left}'
     (dst / 'index.html').write_text(html, encoding='utf-8')
 
+    pages, page_images = [], {'/': [b for b in cfg['assets'] if re.search(r'work/thumb-[\w-]+\.jpg$', b)]}
+    if cfg.get('subpages'):
+        import site_pages
+        h8 = lambda p: hashlib.md5(p.read_bytes()).hexdigest()[:8]
+        pages, more = site_pages.build_all(html, lambda f: h8(dst / 'shared' / f), lambda n: h8(dst / 'assets' / 'work' / n))
+        page_images.update(more)
+        for path, page in pages:
+            (dst / path.strip('/')).mkdir(parents=True, exist_ok=True)
+            (dst / path.strip('/') / 'index.html').write_text(add_faq_schema(bake_links(page)), encoding='utf-8')
+
     (dst / '404.html').write_text(NOT_FOUND, encoding='utf-8')
     (dst / '_headers').write_text(HEADERS, encoding='utf-8')
     (dst / '.htaccess').write_text(HOSTINGER_CONFIG, encoding='utf-8')
     shutil.copy2(PROTO / 'shared' / 'favicon.ico', dst / 'favicon.ico')   # browsers ask for /favicon.ico whatever the page says
     (dst / f'{INDEXNOW_KEY}.txt').write_text(INDEXNOW_KEY, encoding='utf-8')
     (dst / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n', encoding='utf-8')
-    # the work shown in the 3D scene is drawn on a canvas, so it is listed here for image search
-    images = ''.join(f'\n    <image:image><image:loc>{DOMAIN}/{b}</image:loc></image:image>' for b in cfg['assets'] if re.search(r'work/thumb-[\w-]+\.jpg$', b))
+    # every page, with the work it shows (the home page draws its work on a canvas, so image search learns of it here)
+    today = datetime.date.today().isoformat()
+    urls = ''.join(f'  <url><loc>{DOMAIN}{path}</loc><lastmod>{today}</lastmod>'
+                   + ''.join(f'\n    <image:image><image:loc>{DOMAIN}/{b}</image:loc></image:image>' for b in imgs) + '\n  </url>\n'
+                   for path, imgs in page_images.items())
     (dst / 'sitemap.xml').write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
-        f'  <url><loc>{DOMAIN}/</loc><lastmod>{datetime.date.today().isoformat()}</lastmod>{images}\n  </url>\n</urlset>\n', encoding='utf-8')
+        f'{urls}</urlset>\n', encoding='utf-8')
     size = sum(p.stat().st_size for p in dst.rglob('*') if p.is_file())
     print(f'{name}: {dst} ({size / 1024:.0f} KB)')
 

@@ -4,8 +4,8 @@ export const THUMBS = {
   wealthy: { file: 'thumb-wealthy.jpg', label: '10 Things to Become Wealthy' },
   stocks: { file: 'thumb-stocks.jpg', label: 'Top 10 Rising Stocks' },
   creator: { file: 'thumb-creator.jpg', label: 'Day in the Life of a Content Creator' },
-  rawtalks: { file: 'thumb-rawtalks.jpg', label: 'Raw Talks with VK' },
-  'rawtalks-plain': { file: 'thumb-rawtalks-plain.jpg', label: 'Raw Talks with VK' },
+  rawtalks: { file: 'thumb-rawtalks.jpg', label: 'Podcast episode' },
+  'rawtalks-plain': { file: 'thumb-rawtalks-plain.jpg', label: 'Podcast episode' },
 };
 export const REEL = { file: 'reel-podcast.mp4', small: 'reel-podcast-sm.mp4', label: 'Podcast short', seconds: 11 };
 
