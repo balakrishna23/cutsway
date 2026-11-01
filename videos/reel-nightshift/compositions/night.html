@@ -1,0 +1,418 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #07070a;
+      font-family: "Archivo";
+      color: #f4f2ec;
+    }
+    #night-room {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(900px 620px at 50% 112%, rgb(252 128 32 / 0.34), transparent 70%),
+        radial-gradient(560px 460px at 8% 104%, rgb(251 59 39 / 0.24), transparent 70%),
+        linear-gradient(180deg, #0e1236 0%, #07070a 60%);
+    }
+    #night-window {
+      position: absolute;
+      left: 90px;
+      top: 250px;
+      width: 900px;
+      height: 440px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 14px solid #24242d;
+    }
+    .night-sky {
+      position: absolute;
+      inset: 0;
+    }
+    #night-dusk {
+      background: linear-gradient(180deg, #0e1236 0%, #761a2b 52%, #fb3b27 78%, #fc8020 100%);
+    }
+    #night-mid {
+      background: linear-gradient(180deg, #04050c 0%, #0e1236 100%);
+    }
+    #night-dawn {
+      background: linear-gradient(180deg, #232842 0%, #a81d30 30%, #fc8020 58%, #fcb51c 78%, #fcf397 100%);
+    }
+    #night-stars,
+    #night-city {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 872px;
+      height: 412px;
+    }
+    #night-sun {
+      position: absolute;
+      left: 520px;
+      top: 460px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fcf397 0%, #fddf4b 46%, rgb(252 181 28 / 0) 72%);
+    }
+    .night-star {
+      position: absolute;
+      width: 180px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, rgb(244 242 236 / 0), #f4f2ec);
+      opacity: 0;
+    }
+    #night-mullion {
+      position: absolute;
+      left: 429px;
+      top: 0;
+      width: 12px;
+      height: 100%;
+      background: #24242d;
+    }
+    .night-copy {
+      position: absolute;
+      left: 60px;
+      width: 960px;
+      top: 300px;
+      text-align: center;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 100px;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      color: #f4f2ec;
+      text-shadow: 0 6px 30px rgb(7 7 10 / 0.6);
+    }
+    .night-copy .w {
+      display: inline-block;
+    }
+    #night-clock {
+      position: absolute;
+      left: 90px;
+      top: 712px;
+      width: 900px;
+      height: 160px;
+      overflow: hidden;
+    }
+    .night-time {
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 900px;
+      text-align: center;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 140px;
+      line-height: 1;
+      letter-spacing: -0.012em;
+      color: #f4f2ec;
+      white-space: nowrap;
+    }
+    .night-card {
+      position: absolute;
+      left: 90px;
+      top: 900px;
+      width: 900px;
+      height: 400px;
+    }
+    .night-card-in {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: #111116;
+      border: 2px solid rgb(244 242 236 / 0.2);
+      overflow: hidden;
+    }
+    .nc-tag {
+      position: absolute;
+      left: 40px;
+      top: 32px;
+      font-weight: 800;
+      font-size: 40px;
+      color: #fc8020;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .nc-name {
+      position: absolute;
+      left: 40px;
+      top: 92px;
+      font-weight: 900;
+      font-stretch: 100%;
+      font-size: 80px;
+      line-height: 0.92;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .nc-detail {
+      position: absolute;
+      left: 40px;
+      top: 200px;
+      width: 500px;
+      font-weight: 600;
+      font-size: 42px;
+      line-height: 1.16;
+      color: #c4c4d0;
+    }
+    .nc-back {
+      position: absolute;
+      right: 40px;
+      top: 168px;
+      font-weight: 700;
+      font-size: 40px;
+      color: #c4c4d0;
+      text-transform: uppercase;
+    }
+    .nc-num {
+      position: absolute;
+      right: 34px;
+      top: 214px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 120px;
+      line-height: 0.87;
+      color: #fddf4b;
+      white-space: nowrap;
+    }
+    .nc-track {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 30px;
+      height: 14px;
+      border-radius: 7px;
+      background: rgb(244 242 236 / 0.12);
+      overflow: hidden;
+    }
+    .nc-fill {
+      position: absolute;
+      inset: 0;
+      background: #fc8020;
+      transform-origin: left center;
+    }
+  </style>
+  <div id="root" data-composition-id="night" data-width="1080" data-height="1920">
+    <div id="night-room"></div>
+
+    <div id="night-window" class="clip" data-start="0" data-duration="13.5" data-track-index="1" data-layout-allow-overflow>
+      <div id="night-dusk" class="night-sky"></div>
+      <div id="night-mid" class="night-sky"></div>
+      <div id="night-dawn" class="night-sky"></div>
+      <svg id="night-stars" viewBox="0 0 872 412"></svg>
+      <div id="night-sun"></div>
+      <svg id="night-city" viewBox="0 0 872 412"></svg>
+      <div id="night-star1" class="night-star" style="left: 80px; top: 40px"></div>
+      <div id="night-star2" class="night-star" style="left: 420px; top: 70px"></div>
+      <div id="night-star3" class="night-star" style="left: 200px; top: 30px"></div>
+      <div id="night-mullion"></div>
+    </div>
+
+    <h2 id="night-sleep" class="night-copy clip" data-start="0" data-duration="6.5" data-track-index="2">
+      <span class="w" id="night-s1">While</span> <span class="w" id="night-s2">you</span><br />
+      <span class="w" id="night-s3">sleep,</span>
+    </h2>
+    <h2 id="night-cut" class="night-copy clip" data-start="6.5" data-duration="6.625" data-track-index="3">
+      <span class="w" id="night-c1">We</span> <span class="w" id="night-c2" style="color: #fddf4b">cut.</span>
+    </h2>
+
+    <div id="night-clock" class="clip" data-start="0" data-duration="13.5" data-track-index="4" data-layout-allow-overflow>
+      <div id="night-time-a" class="night-time" data-layout-allow-overlap>9:00 PM</div>
+      <div id="night-time-b" class="night-time" data-layout-ignore>9:00 PM</div>
+    </div>
+
+    <!-- On the desk tonight: one card per service, seven beats each. -->
+    <div id="night-k1" class="night-card clip" data-start="0" data-duration="3.28125" data-track-index="5">
+      <div id="night-k1-in" class="night-card-in">
+        <div class="nc-tag">Now cutting</div>
+        <div class="nc-name">Thumbnails</div>
+        <div class="nc-detail">Three concepts in 3 hours, final art in 8.</div>
+        <div class="nc-back">Back in</div>
+        <div class="nc-num" id="night-k1-num">8H</div>
+        <div class="nc-track"><div class="nc-fill" id="night-k1-fill"></div></div>
+      </div>
+    </div>
+    <div id="night-k2" class="night-card clip" data-start="3.28125" data-duration="3.28125" data-track-index="6">
+      <div id="night-k2-in" class="night-card-in">
+        <div class="nc-tag">Now cutting</div>
+        <div class="nc-name">Shorts &amp; reels</div>
+        <div class="nc-detail">One VOD becomes a week of verticals, captioned.</div>
+        <div class="nc-back">Back in</div>
+        <div class="nc-num" id="night-k2-num">12H</div>
+        <div class="nc-track"><div class="nc-fill" id="night-k2-fill"></div></div>
+      </div>
+    </div>
+    <div id="night-k3" class="night-card clip" data-start="6.5625" data-duration="3.28125" data-track-index="7">
+      <div id="night-k3-in" class="night-card-in">
+        <div class="nc-tag">Now cutting</div>
+        <div class="nc-name">Gaming videos</div>
+        <div class="nc-detail">First cut by morning, final with your notes.</div>
+        <div class="nc-back">Back in</div>
+        <div class="nc-num" id="night-k3-num">36H</div>
+        <div class="nc-track"><div class="nc-fill" id="night-k3-fill"></div></div>
+      </div>
+    </div>
+    <div id="night-k4" class="night-card clip" data-start="9.84375" data-duration="3.28125" data-track-index="8">
+      <div id="night-k4-in" class="night-card-in">
+        <div class="nc-tag">Now cutting</div>
+        <div class="nc-name">Podcasts</div>
+        <div class="nc-detail">Multi-cam, levelled, plus the clips.</div>
+        <div class="nc-back">Back in</div>
+        <div class="nc-num" id="night-k4-num">48H</div>
+        <div class="nc-track"><div class="nc-fill" id="night-k4-fill"></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const NS = "http://www.w3.org/2000/svg";
+      function mulberry32(a) {
+        return function () {
+          a |= 0;
+          a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      const rnd = mulberry32(900021);
+      const B = 60 / 128;
+      // One hour every two beats: 9 PM to 9 AM in 11.25 s, then 9 AM holds.
+      const STEP = 2 * B;
+      const CARD = 7 * B;
+      const HOURS = ["9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM",
+        "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM"];
+
+      // Static decoration: stars and the skyline with its lit windows.
+      const stars = document.getElementById("night-stars");
+      for (let i = 0; i < 60; i++) {
+        const c = document.createElementNS(NS, "circle");
+        c.setAttribute("cx", (rnd() * 872).toFixed(1));
+        c.setAttribute("cy", (rnd() * 220).toFixed(1));
+        c.setAttribute("r", (0.8 + rnd() * 1.6).toFixed(1));
+        c.setAttribute("fill", "#f4f2ec");
+        c.setAttribute("opacity", (0.3 + rnd() * 0.6).toFixed(2));
+        stars.appendChild(c);
+      }
+      const city = document.getElementById("night-city");
+      const lights = [];
+      let x = 0;
+      while (x < 872) {
+        const w = 50 + rnd() * 80;
+        const h = 90 + rnd() * 150;
+        const b = document.createElementNS(NS, "rect");
+        b.setAttribute("x", x.toFixed(1));
+        b.setAttribute("y", (412 - h).toFixed(1));
+        b.setAttribute("width", (w + 1).toFixed(1));
+        b.setAttribute("height", h.toFixed(1));
+        b.setAttribute("fill", "#0b0b10");
+        city.appendChild(b);
+        for (let wy = 412 - h + 14; wy < 400; wy += 22) {
+          for (let wx = x + 10; wx < x + w - 14; wx += 19) {
+            if (rnd() < 0.42) {
+              const l = document.createElementNS(NS, "rect");
+              l.setAttribute("x", wx.toFixed(1));
+              l.setAttribute("y", wy.toFixed(1));
+              l.setAttribute("width", "8");
+              l.setAttribute("height", "11");
+              l.setAttribute("fill", "#fcb51c");
+              city.appendChild(l);
+              lights.push({ el: l, off: 0.8 + rnd() * 9.6, keep: rnd() < 0.12 });
+            }
+          }
+        }
+        x += w + 6 + rnd() * 10;
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+      // Shooting stars across the night sky.
+      [["#night-star1", 1.9], ["#night-star2", 4.6], ["#night-star3", 7.4]].forEach(([id, at]) => {
+        tl.fromTo(id, { x: 0, y: 0, rotation: 18, opacity: 0 }, { x: 420, y: 140, opacity: 1, duration: 0.18, ease: "power2.in" }, at);
+        tl.to(id, { opacity: 0, duration: 0.14, ease: "power2.out" }, at + 0.18);
+      });
+      punch(["#night-s1", "#night-s2", "#night-s3"], [2, 4, 6, 8, 10].map((k) => k * B + 0.1), 0.04);
+      punch(["#night-c1", "#night-c2"], [6.5625 + 2 * B, 6.5625 + 4 * B, 6.5625 + 6 * B], 0.06);
+
+      // The sky: dusk, then midnight, then dawn.
+      tl.fromTo("#night-mid", { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 0.3);
+      tl.fromTo("#night-stars", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.inOut" }, 0.8);
+      tl.to("#night-stars", { opacity: 0, duration: 1.2, ease: "power2.inOut" }, 8.8);
+      tl.fromTo("#night-dawn", { opacity: 0 }, { opacity: 1, duration: 2.4, ease: "power2.inOut" }, 8.6);
+      tl.fromTo("#night-sun", { y: 0 }, { y: -320, duration: 3.0, ease: "power2.out" }, 9.0);
+      lights.forEach((l) => {
+        if (!l.keep) tl.fromTo(l.el, { opacity: 1 }, { opacity: 0.1, duration: 0.08, ease: "none" }, l.off);
+      });
+
+      // The copy in the sky.
+      tl.fromTo(
+        ["#night-s1", "#night-s2", "#night-s3"],
+        { opacity: 0, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power4.out", stagger: 0.067 },
+        0.1,
+      );
+      tl.to(["#night-s1", "#night-s2", "#night-s3"], { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power3.in", stagger: 0.02 }, 6.35);
+      tl.fromTo(
+        ["#night-c1", "#night-c2"],
+        { opacity: 0, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power4.out", stagger: 0.08 },
+        6.5625,
+      );
+      tl.to(["#night-c1", "#night-c2"], { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power3.in" }, 12.95);
+
+      // The desk: each card rises in on its downbeat, fills its bar, and leaves upward.
+      for (let k = 1; k <= 4; k++) {
+        const t0 = (k - 1) * CARD;
+        tl.fromTo(`#night-k${k}-in`, { y: 160, opacity: 0, filter: "blur(12px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "expo.out" }, t0);
+        tl.fromTo(`#night-k${k}-num`, { scale: 1.35, opacity: 0, transformOrigin: "right center" }, { scale: 1, opacity: 1, duration: 0.22, ease: "expo.out" }, t0 + B);
+        tl.fromTo(`#night-k${k}-fill`, { scaleX: 0 }, { scaleX: 1, duration: CARD - 0.4, ease: "none" }, t0 + 0.15);
+        punch(`#night-k${k}-num`, [t0 + 3 * B, t0 + 5 * B], 0.12, 0.2);
+        punch(`#night-k${k}-in`, [t0 + 4 * B], 0.02, 0.25);
+        tl.to(`#night-k${k}-in`, { y: -80, opacity: 0, filter: "blur(10px)", duration: 0.18, ease: "power3.in" }, t0 + CARD - 0.18);
+      }
+
+      // The clock, a quick roll on every step.
+      const a = document.getElementById("night-time-a");
+      const b = document.getElementById("night-time-b");
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: 13.5, duration: 13.5, ease: "none" }, 0);
+      function paint() {
+        const t = clock.t;
+        const k = Math.min(12, Math.floor(t / STEP));
+        const f = Math.min(1, (t - k * STEP) / 0.1);
+        const e = 1 - Math.pow(1 - f, 3);
+        const hit = 1 + 0.08 * Math.exp(-(t - k * STEP) / 0.12);
+        a.textContent = HOURS[k];
+        a.style.color = k === 12 ? "#fddf4b" : "#f4f2ec";
+        if (k > 0 && k <= 12 && t - k * STEP < 0.1) {
+          b.textContent = HOURS[k - 1];
+          a.style.transform = `translateY(${(1 - e) * 110}px) scale(${hit})`;
+          b.style.transform = `translateY(${-e * 110}px)`;
+          b.style.opacity = String(1 - e);
+          a.style.opacity = String(e);
+        } else {
+          a.style.transform = `translateY(0px) scale(${k > 0 ? hit : 1})`;
+          a.style.opacity = "1";
+          b.style.opacity = "0";
+        }
+      }
+      tl.eventCallback("onUpdate", paint);
+      paint();
+      window.__timelines["night"] = tl;
+    })();
+  </script>
+</template>

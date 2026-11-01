@@ -1,0 +1,195 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #07070a;
+      font-family: "Archivo";
+      color: #f4f2ec;
+    }
+    #proof-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(520px 420px at 12% 104%, rgb(28 76 221 / 0.34), transparent 70%),
+        radial-gradient(560px 380px at 50% 106%, rgb(107 93 18 / 0.3), transparent 70%),
+        radial-gradient(520px 420px at 90% 104%, rgb(251 59 39 / 0.26), transparent 70%);
+    }
+    .proof-part {
+      position: absolute;
+      inset: 0;
+    }
+    .proof-head {
+      position: absolute;
+      font-weight: 900;
+      font-stretch: 125%;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #proof-two {
+      left: 80px;
+      top: 300px;
+      font-size: 380px;
+      color: #fddf4b;
+    }
+    #proof-rounds {
+      left: 392px;
+      top: 400px;
+      font-size: 84px;
+    }
+    #proof-track {
+      position: absolute;
+      left: 90px;
+      top: 860px;
+      width: 900px;
+      height: 96px;
+      border-radius: 16px;
+      background: #111118;
+      border: 2px solid rgb(244 242 236 / 0.2);
+      overflow: hidden;
+    }
+    .proof-seg {
+      position: absolute;
+      top: 22px;
+      height: 52px;
+      border-radius: 8px;
+      background: #1c4cdd;
+    }
+    .proof-pin {
+      position: absolute;
+      top: 640px;
+      width: 290px;
+    }
+    .proof-pin p {
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: #f4f2ec;
+      color: #07070a;
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1.05;
+    }
+    .proof-pin i {
+      position: absolute;
+      left: 26px;
+      top: 100%;
+      width: 6px;
+      height: 130px;
+      background: #fddf4b;
+    }
+    #proof-exact {
+      position: absolute;
+      left: 90px;
+      top: 1010px;
+      width: 900px;
+      font-weight: 600;
+      font-size: 52px;
+      color: #c4c4d0;
+    }
+    #proof-post {
+      left: 90px;
+      top: 320px;
+      font-size: 128px;
+    }
+    .proof-pill {
+      position: absolute;
+      width: 438px;
+      height: 150px;
+      border-radius: 28px;
+      background: #f4f2ec;
+      color: #07070a;
+      font-weight: 900;
+      font-stretch: 112%;
+      font-size: 52px;
+      line-height: 150px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    #proof-caps {
+      position: absolute;
+      left: 90px;
+      top: 1000px;
+      width: 900px;
+      font-weight: 600;
+      font-size: 52px;
+      line-height: 1.2;
+      color: #c4c4d0;
+    }
+    #proof-caps b {
+      color: #f4f2ec;
+    }
+  </style>
+  <div id="root" data-composition-id="proof" data-width="1080" data-height="1920">
+    <div id="proof-glow"></div>
+
+    <div id="proof-a" class="proof-part clip" data-start="0" data-duration="1.875" data-track-index="1" data-layout-allow-overflow>
+      <div id="proof-a-in" class="proof-part">
+        <div id="proof-two" class="proof-head">2</div>
+        <div id="proof-rounds" class="proof-head">Rounds<br />of notes</div>
+        <div id="proof-pin1" class="proof-pin" style="left: 120px"><p>Tighten this</p><i></i></div>
+        <div id="proof-pin2" class="proof-pin" style="left: 420px"><p>Zoom on the kill</p><i></i></div>
+        <div id="proof-pin3" class="proof-pin" style="left: 700px; width: 270px"><p>Music up here</p><i></i></div>
+        <div id="proof-track">
+          <div class="proof-seg" style="left: 16px; width: 250px"></div>
+          <div class="proof-seg" style="left: 278px; width: 300px; background: #fc8020"></div>
+          <div class="proof-seg" style="left: 590px; width: 292px; background: #03c0f4"></div>
+        </div>
+        <div id="proof-exact">Left on the exact frame.</div>
+      </div>
+    </div>
+
+    <div id="proof-b" class="proof-part clip" data-start="1.875" data-duration="1.875" data-track-index="2" data-layout-allow-overflow>
+      <div id="proof-b-in" class="proof-part">
+        <div id="proof-post" class="proof-head">We post<br /><span style="color: #fddf4b">it too.</span></div>
+        <div id="proof-p1" class="proof-pill" style="left: 90px; top: 640px">YouTube</div>
+        <div id="proof-p2" class="proof-pill" style="left: 552px; top: 640px">Instagram</div>
+        <div id="proof-p3" class="proof-pill" style="left: 90px; top: 810px">TikTok</div>
+        <div id="proof-p4" class="proof-pill" style="left: 552px; top: 810px; background: #fddf4b">X</div>
+        <div id="proof-caps"><b>Titles + captions</b> for each.</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const B = 60 / 128;
+      const tl = gsap.timeline({ paused: true });
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+      punch("#proof-rounds", [B, 2 * B, 3 * B], 0.06);
+      punch(["#proof-p1", "#proof-p2", "#proof-p3", "#proof-p4"], [1.875 + 3 * B], 0.08);
+      tl.fromTo("#proof-track", { x: 0 }, { x: -24, duration: 1.6, ease: "none" }, 0.2);
+
+      // A: two rounds of notes, pinned to the frame on the beats.
+      tl.fromTo("#proof-a-in", { y: 1920, filter: "blur(18px)" }, { y: 0, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, 0);
+      tl.fromTo("#proof-two", { scale: 1.4, transformOrigin: "left top" }, { scale: 1, duration: 0.3, ease: "expo.out" }, 0);
+      [1, 2, 3].forEach((n) => {
+        tl.fromTo(`#proof-pin${n}`, { y: -90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18, ease: "expo.out" }, B * 0.5 * n);
+      });
+      tl.fromTo("#proof-exact", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power4.out" }, B * 0.6);
+      tl.to("#proof-a-in", { x: -1080, filter: "blur(18px)", duration: 0.2, ease: "power3.in" }, 1.875 - 0.2);
+
+      // B: we post it too, one platform per beat.
+      tl.fromTo("#proof-b-in", { x: 1080, filter: "blur(18px)" }, { x: 0, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, 1.875);
+      [1, 2, 3, 4].forEach((n) => {
+        tl.fromTo(`#proof-p${n}`, { scale: 1.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "expo.out" }, 1.975 + (n - 1) * B * 0.75);
+      });
+      tl.fromTo("#proof-caps", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power4.out" }, 1.875 + B * 1.2);
+      tl.to("#proof-b-in", { scale: 0.9, opacity: 0, filter: "blur(14px)", duration: 0.2, ease: "power3.in" }, 3.75 - 0.2);
+
+      window.__timelines["proof"] = tl;
+    })();
+  </script>
+</template>

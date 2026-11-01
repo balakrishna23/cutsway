@@ -1,0 +1,195 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #07070a;
+      font-family: "Archivo";
+    }
+    #send-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(900px 620px at 50% 112%, rgb(252 128 32 / 0.42), transparent 70%),
+        radial-gradient(560px 460px at 8% 104%, rgb(251 59 39 / 0.3), transparent 70%),
+        radial-gradient(700px 500px at 50% -10%, rgb(14 18 54 / 0.9), transparent 70%);
+    }
+    #send-title {
+      position: absolute;
+      left: 60px;
+      top: 360px;
+      width: 960px;
+      text-align: center;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 140px;
+      white-space: nowrap;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      color: #f4f2ec;
+    }
+    #send-title .w {
+      display: inline-block;
+    }
+    #send-title .hl {
+      color: #fddf4b;
+    }
+    #send-card {
+      position: absolute;
+      left: 90px;
+      top: 820px;
+      width: 900px;
+      height: 250px;
+    }
+    #send-card-in {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: #15151d;
+      border: 2px solid rgb(244 242 236 / 0.24);
+    }
+    #send-thumb {
+      position: absolute;
+      left: 30px;
+      top: 40px;
+      width: 300px;
+      height: 170px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #272ed2 0%, #108ae8 45%, #fc8020 70%, #0d1430 70.5%, #0d1430 100%);
+    }
+    .send-tower {
+      position: absolute;
+      bottom: 30%;
+      background: #0d1430;
+    }
+    #send-name {
+      position: absolute;
+      left: 360px;
+      top: 46px;
+      font-weight: 800;
+      font-size: 50px;
+      color: #f4f2ec;
+    }
+    #send-meta {
+      position: absolute;
+      left: 360px;
+      top: 108px;
+      font-weight: 600;
+      font-size: 40px;
+      color: #c4c4d0;
+    }
+    #send-track {
+      position: absolute;
+      left: 360px;
+      top: 182px;
+      width: 500px;
+      height: 16px;
+      border-radius: 8px;
+      background: rgb(244 242 236 / 0.16);
+      overflow: hidden;
+    }
+    #send-fill {
+      position: absolute;
+      inset: 0;
+      background: #fddf4b;
+      transform-origin: left center;
+    }
+    #send-chip {
+      position: absolute;
+      left: 190px;
+      width: 700px;
+      top: 1130px;
+      padding: 20px 0;
+      border-radius: 999px;
+      text-align: center;
+      background: rgb(244 242 236 / 0.1);
+      border: 2px solid rgb(244 242 236 / 0.24);
+      font-weight: 800;
+      font-size: 48px;
+      line-height: 1;
+      color: #f4f2ec;
+      white-space: nowrap;
+    }
+    #send-stamp {
+      position: absolute;
+      right: 30px;
+      top: -32px;
+      padding: 14px 26px;
+      border-radius: 999px;
+      background: #fddf4b;
+      color: #07070a;
+      font-weight: 800;
+      font-size: 40px;
+      white-space: nowrap;
+    }
+  </style>
+  <div id="root" data-composition-id="send" data-width="1080" data-height="1920">
+    <div id="send-glow"></div>
+    <h1 id="send-title" class="clip" data-start="0" data-duration="3.75" data-track-index="1">
+      <span class="w" id="send-w1">Send</span> <span class="w" id="send-w2">it</span><br />
+      <span class="w hl" id="send-w3">tonight.</span>
+    </h1>
+    <div id="send-card" class="clip" data-start="0" data-duration="3.75" data-track-index="2" data-layout-allow-overflow>
+      <div id="send-card-in">
+        <div id="send-thumb">
+          <div class="send-tower" style="left: 40px; width: 40px; height: 70px"></div>
+          <div class="send-tower" style="left: 96px; width: 30px; height: 100px"></div>
+          <div class="send-tower" style="left: 190px; width: 56px; height: 60px"></div>
+        </div>
+        <div id="send-name">RAID_VOD_04.mp4</div>
+        <div id="send-meta">4h 12m of raw gameplay</div>
+        <div id="send-track"><div id="send-fill"></div></div>
+        <div id="send-stamp">Sent · 9:00 PM</div>
+      </div>
+    </div>
+    <div id="send-chip" class="clip" data-start="0" data-duration="3.75" data-track-index="3">VODs · streams · podcasts</div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+      const BEAT = 60 / 128;
+      punch(["#send-w1", "#send-w2", "#send-w3"], [1, 2, 3, 4, 5, 6].map((k) => k * BEAT), 0.045);
+      // The stamp lands hard enough to shake the card.
+      [10, -8, 6, -3, 0].forEach((dx, i) => tl.to("#send-name, #send-meta, #send-track", { x: dx, duration: 0.035, ease: "none" }, 2.34375 + i * 0.035));
+      // The hook is on screen at frame 0. The card lands under it.
+      tl.fromTo(
+        "#send-card-in",
+        { y: 120, opacity: 0, filter: "blur(10px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "expo.out" },
+        0,
+      );
+      tl.fromTo("#send-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.85, ease: "power2.inOut" }, 0.3);
+      tl.fromTo(
+        "#send-stamp",
+        { scale: 1.35, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.25, ease: "expo.out" },
+        2.34375,
+      );
+      tl.fromTo("#send-chip", { y: 40, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "expo.out" }, 1.40625);
+      tl.to("#send-chip", { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power3.in" }, 3.45);
+      tl.to(
+        ["#send-w1", "#send-w2", "#send-w3"],
+        { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power3.in", stagger: 0.03 },
+        3.45,
+      );
+      // The file drops onto tonight's desk, where the next shot picks it up.
+      tl.to("#send-card-in", { y: 150, opacity: 0, filter: "blur(12px)", duration: 0.3, ease: "power3.in" }, 3.45);
+      window.__timelines["send"] = tl;
+    })();
+  </script>
+</template>

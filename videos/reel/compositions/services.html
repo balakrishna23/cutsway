@@ -1,0 +1,470 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #07070a;
+      font-family: "Archivo";
+      color: #f4f2ec;
+    }
+    #svc-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(520px 420px at 12% 104%, rgb(28 76 221 / 0.34), transparent 70%),
+        radial-gradient(560px 380px at 50% 106%, rgb(107 93 18 / 0.3), transparent 70%),
+        radial-gradient(520px 420px at 90% 104%, rgb(251 59 39 / 0.26), transparent 70%);
+    }
+    .svc {
+      position: absolute;
+      inset: 0;
+    }
+    .svc-in {
+      position: absolute;
+      inset: 0;
+    }
+    .svc-bg {
+      position: absolute;
+      right: -60px;
+      top: 1080px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 640px;
+      line-height: 0.8;
+      color: transparent;
+      -webkit-text-stroke: 3px rgb(244 242 236 / 0.09);
+      white-space: nowrap;
+    }
+    .svc-tag {
+      position: absolute;
+      left: 90px;
+      top: 262px;
+      font-weight: 700;
+      font-size: 40px;
+      color: #c4c4d0;
+      white-space: nowrap;
+    }
+    .svc-tag b {
+      color: #fddf4b;
+      font-weight: 800;
+    }
+    .svc-name {
+      position: absolute;
+      left: 90px;
+      top: 326px;
+      width: 900px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 132px;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .svc-art {
+      position: absolute;
+      left: 90px;
+      top: 590px;
+      width: 900px;
+      height: 360px;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #111118;
+      border: 2px solid rgb(244 242 236 / 0.24);
+    }
+    .svc-back {
+      position: absolute;
+      left: 90px;
+      top: 998px;
+      font-weight: 700;
+      font-size: 40px;
+      color: #c4c4d0;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .svc-num {
+      position: absolute;
+      left: 84px;
+      top: 1046px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 150px;
+      line-height: 0.87;
+      letter-spacing: -0.02em;
+      color: #fddf4b;
+      transform-origin: left center;
+      white-space: nowrap;
+    }
+    .svc-detail {
+      position: absolute;
+      left: 530px;
+      top: 1040px;
+      width: 460px;
+      font-weight: 600;
+      font-size: 44px;
+      line-height: 1.18;
+      color: #f4f2ec;
+    }
+    .svc-detail span {
+      display: block;
+    }
+
+    /* 01 gaming: a level with a retention graph drawing over it */
+    #svc-game-sky {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #272ed2 0%, #108ae8 40%, #5ae2e8 62%, #fcf397 72%, #0d1430 72.2%, #0d1430 100%);
+    }
+    .svc-hill {
+      position: absolute;
+      bottom: 28%;
+      background: #0d1430;
+      border-radius: 50% 50% 0 0;
+    }
+    #svc-ret {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 900px;
+      height: 360px;
+    }
+    #svc-ret-label {
+      position: absolute;
+      left: 26px;
+      top: 24px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgb(7 7 10 / 0.75);
+      font-weight: 800;
+      font-size: 40px;
+      color: #fddf4b;
+    }
+    /* 02 shorts: a week of verticals */
+    #svc-week {
+      position: absolute;
+      inset: 0;
+      background: #15111d;
+    }
+    .svc-phone {
+      position: absolute;
+      top: 34px;
+      width: 106px;
+      height: 230px;
+      border-radius: 16px;
+      border: 3px solid #2a2a36;
+      overflow: hidden;
+    }
+    .svc-phone i {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 12px;
+      border-radius: 3px;
+      background: #f4f2ec;
+    }
+    .svc-phone i.hl {
+      background: #fddf4b;
+    }
+    .svc-day {
+      position: absolute;
+      top: 284px;
+      width: 106px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 40px;
+      color: #c4c4d0;
+    }
+    /* 03 podcasts: the real studio photo, three camera angles */
+    #svc-pod-main {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 560px;
+      height: 360px;
+      object-fit: cover;
+      object-position: 45% 45%;
+    }
+    .svc-cam {
+      position: absolute;
+      left: 576px;
+      width: 308px;
+      height: 104px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 3px solid rgb(244 242 236 / 0.2);
+    }
+    .svc-cam img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .svc-cam b {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      font-size: 40px;
+      font-weight: 800;
+      color: #f4f2ec;
+      text-shadow: 0 2px 8px rgb(7 7 10 / 0.9);
+    }
+    #svc-pod-wave {
+      position: absolute;
+      left: 24px;
+      bottom: 22px;
+      width: 512px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    #svc-pod-wave div {
+      flex: 1;
+      height: 64px;
+      border-radius: 5px;
+      background: #fddf4b;
+    }
+    /* 04 thumbnails: three concepts, one picked */
+    #svc-thumbs {
+      position: absolute;
+      inset: 0;
+      background: #15111d;
+    }
+    .svc-thumb {
+      position: absolute;
+      top: 70px;
+      width: 268px;
+      height: 151px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 4px solid transparent;
+    }
+    .svc-thumb b {
+      position: absolute;
+      left: 12px;
+      top: 14px;
+      width: 150px;
+      font-weight: 900;
+      font-stretch: 110%;
+      font-size: 30px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      color: #07070a;
+    }
+    .svc-thumb i {
+      position: absolute;
+      right: 14px;
+      bottom: 0;
+      width: 96px;
+      height: 112px;
+      border-radius: 48px 48px 0 0;
+      background: #c48a67;
+    }
+    .svc-thumb-label {
+      position: absolute;
+      top: 248px;
+      width: 268px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 40px;
+      color: #c4c4d0;
+    }
+  </style>
+  <div id="root" data-composition-id="services" data-width="1080" data-height="1920">
+    <div id="svc-glow"></div>
+
+    <!-- 01 Gaming videos -->
+    <div id="svc-1" class="svc clip" data-start="0" data-duration="3.75" data-track-index="1" data-layout-allow-overflow>
+      <div id="svc-1-in" class="svc-in">
+        <div id="svc-1-bg" class="svc-bg" data-layout-ignore>01</div>
+        <div id="svc-1-tag" class="svc-tag"><b>01</b> / 04 · What we cut</div>
+        <h2 id="svc-1-name" class="svc-name">Gaming<br />videos</h2>
+        <div id="svc-1-art" class="svc-art">
+          <div id="svc-game-sky"></div>
+          <div class="svc-hill" style="left: 360px; width: 380px; height: 130px"></div>
+          <div class="svc-hill" style="left: 640px; width: 300px; height: 90px"></div>
+          <svg id="svc-ret" viewBox="0 0 900 360">
+            <polyline id="svc-ret-line" fill="none" stroke="#fddf4b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"
+              points="30,110 120,128 210,120 300,132 390,124 480,140 570,132 660,146 750,140 870,150" />
+          </svg>
+          <div id="svc-ret-label">Retention held</div>
+        </div>
+        <div id="svc-1-back" class="svc-back">Back in</div>
+        <div id="svc-1-num" class="svc-num">36H</div>
+        <div id="svc-1-detail" class="svc-detail">
+          <span id="svc-1-d1">Story and retention</span><span id="svc-1-d2">edits, thumbnail</span><span id="svc-1-d3">made alongside.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Shorts and reels -->
+    <div id="svc-2" class="svc clip" data-start="3.75" data-duration="3.75" data-track-index="2" data-layout-allow-overflow>
+      <div id="svc-2-in" class="svc-in">
+        <div id="svc-2-bg" class="svc-bg" data-layout-ignore>02</div>
+        <div id="svc-2-tag" class="svc-tag"><b>02</b> / 04 · What we cut</div>
+        <h2 id="svc-2-name" class="svc-name">Shorts &amp;<br />reels</h2>
+        <div id="svc-2-art" class="svc-art">
+          <div id="svc-week">
+            <div id="svc-ph1" class="svc-phone" style="left: 28px; background: linear-gradient(180deg, #1c4cdd, #03c0f4)"><i style="top: 170px"></i><i class="hl" style="top: 190px; right: 40px"></i></div>
+            <div id="svc-ph2" class="svc-phone" style="left: 148px; background: linear-gradient(180deg, #fc8020, #fb3b27)"><i class="hl" style="top: 170px"></i><i style="top: 190px; right: 30px"></i></div>
+            <div id="svc-ph3" class="svc-phone" style="left: 268px; background: linear-gradient(180deg, #a9f0dc, #108ae8)"><i style="top: 170px; right: 26px"></i><i class="hl" style="top: 190px"></i></div>
+            <div id="svc-ph4" class="svc-phone" style="left: 388px; background: linear-gradient(180deg, #fcf397, #fcb51c)"><i style="top: 170px"></i><i class="hl" style="top: 190px; right: 36px"></i></div>
+            <div id="svc-ph5" class="svc-phone" style="left: 508px; background: linear-gradient(180deg, #272ed2, #761a2b)"><i class="hl" style="top: 170px; right: 30px"></i><i style="top: 190px"></i></div>
+            <div id="svc-ph6" class="svc-phone" style="left: 628px; background: linear-gradient(180deg, #5ae2e8, #1c4cdd)"><i style="top: 170px"></i><i class="hl" style="top: 190px; right: 22px"></i></div>
+            <div id="svc-ph7" class="svc-phone" style="left: 748px; background: linear-gradient(180deg, #e21c2f, #fc8020)"><i class="hl" style="top: 170px"></i><i style="top: 190px; right: 40px"></i></div>
+            <div class="svc-day" style="left: 28px">M</div>
+            <div class="svc-day" style="left: 148px">T</div>
+            <div class="svc-day" style="left: 268px">W</div>
+            <div class="svc-day" style="left: 388px">T</div>
+            <div class="svc-day" style="left: 508px">F</div>
+            <div class="svc-day" style="left: 628px">S</div>
+            <div class="svc-day" style="left: 748px">S</div>
+          </div>
+        </div>
+        <div id="svc-2-back" class="svc-back">Back in</div>
+        <div id="svc-2-num" class="svc-num">12H</div>
+        <div id="svc-2-detail" class="svc-detail">
+          <span id="svc-2-d1">One VOD becomes</span><span id="svc-2-d2">a week of verticals,</span><span id="svc-2-d3">captioned.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Podcasts -->
+    <div id="svc-3" class="svc clip" data-start="7.5" data-duration="3.75" data-track-index="3" data-layout-allow-overflow>
+      <div id="svc-3-in" class="svc-in">
+        <div id="svc-3-bg" class="svc-bg" data-layout-ignore>03</div>
+        <div id="svc-3-tag" class="svc-tag"><b>03</b> / 04 · What we cut</div>
+        <h2 id="svc-3-name" class="svc-name" style="font-size: 112px; top: 380px">Podcasts</h2>
+        <div id="svc-3-art" class="svc-art">
+          <img id="svc-pod-main" src="assets/mic-2.jpg" alt="" />
+          <div id="svc-cam1" class="svc-cam" style="top: 14px"><img src="assets/mic-2.jpg" alt="" style="object-position: 30% 40%" /><b>CAM 1</b></div>
+          <div id="svc-cam2" class="svc-cam" style="top: 128px"><img src="assets/mic-2.jpg" alt="" style="object-position: 70% 20%" /><b>CAM 2</b></div>
+          <div id="svc-cam3" class="svc-cam" style="top: 242px"><img src="assets/mic-2.jpg" alt="" style="object-position: 90% 70%" /><b>CAM 3</b></div>
+          <div id="svc-pod-wave">
+            <div id="svc-pw1"></div><div id="svc-pw2"></div><div id="svc-pw3"></div><div id="svc-pw4"></div><div id="svc-pw5"></div>
+            <div id="svc-pw6"></div><div id="svc-pw7"></div><div id="svc-pw8"></div><div id="svc-pw9"></div><div id="svc-pw10"></div>
+            <div id="svc-pw11"></div><div id="svc-pw12"></div><div id="svc-pw13"></div><div id="svc-pw14"></div>
+          </div>
+        </div>
+        <div id="svc-3-back" class="svc-back">Back in</div>
+        <div id="svc-3-num" class="svc-num">48H</div>
+        <div id="svc-3-detail" class="svc-detail">
+          <span id="svc-3-d1">Multi-cam, cut clean</span><span id="svc-3-d2">and levelled, plus</span><span id="svc-3-d3">the clips.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Thumbnails -->
+    <div id="svc-4" class="svc clip" data-start="11.25" data-duration="3.75" data-track-index="4" data-layout-allow-overflow>
+      <div id="svc-4-in" class="svc-in">
+        <div id="svc-4-bg" class="svc-bg" data-layout-ignore>04</div>
+        <div id="svc-4-tag" class="svc-tag"><b>04</b> / 04 · What we cut</div>
+        <h2 id="svc-4-name" class="svc-name" style="font-size: 90px; top: 400px">Thumbnails</h2>
+        <div id="svc-4-art" class="svc-art">
+          <div id="svc-thumbs">
+            <div id="svc-th1" class="svc-thumb" style="left: 36px; background: #fddf4b"><b>We lost the raid</b><i></i></div>
+            <div id="svc-th2" class="svc-thumb" style="left: 316px; background: #03c0f4"><b>1 HP clutch</b><i style="background: #8a5a44"></i></div>
+            <div id="svc-th3" class="svc-thumb" style="left: 596px; background: #fc8020"><b>New record?</b><i style="background: #d8a27f"></i></div>
+            <div class="svc-thumb-label" style="left: 36px">A</div>
+            <div class="svc-thumb-label" style="left: 316px">B</div>
+            <div class="svc-thumb-label" style="left: 596px">C</div>
+          </div>
+        </div>
+        <div id="svc-4-back" class="svc-back">Back in</div>
+        <div id="svc-4-num" class="svc-num">8H</div>
+        <div id="svc-4-detail" class="svc-detail">
+          <span id="svc-4-d1">Three concepts in</span><span id="svc-4-d2">3 hours, final art</span><span id="svc-4-d3">in 8.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const B = 60 / 128;
+      const P = 3.75;
+      const HOURS = [36, 12, 48, 8];
+      const tl = gsap.timeline({ paused: true });
+      const counters = HOURS.map(() => ({ v: 0 }));
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+
+
+      HOURS.forEach((h, k) => {
+        const i = k + 1;
+        const t0 = k * P;
+        // Whip in from the right on the downbeat, whip out to the left just before the next bar.
+        tl.fromTo(`#svc-${i}-in`, { x: 1080, filter: "blur(20px)" }, { x: 0, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, t0);
+        tl.fromTo(`#svc-${i}-bg`, { x: 160, rotation: -4 }, { x: -120, rotation: 2, duration: P, ease: "none" }, t0);
+        punch(`#svc-${i}-name`, [t0 + 4 * B], 0.05);
+        punch(`#svc-${i}-num`, [t0 + 4 * B, t0 + 6 * B], 0.12, 0.2);
+        tl.fromTo(`#svc-${i}-name`, { y: 0 }, { y: -14, duration: P - 0.3, ease: "power1.inOut" }, t0 + 0.28);
+        tl.fromTo(`#svc-${i}-tag`, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, t0 + 0.08);
+        tl.fromTo(`#svc-${i}-art`, { scale: 0.86, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, t0 + B);
+        tl.fromTo(`#svc-${i}-back`, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t0 + 2 * B);
+        tl.fromTo(`#svc-${i}-num`, { scale: 1.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.24, ease: "expo.out" }, t0 + 2 * B);
+        tl.fromTo(counters[k], { v: 0 }, { v: h, duration: 0.42, ease: "power2.out" }, t0 + 2 * B);
+        tl.fromTo(
+          [`#svc-${i}-d1`, `#svc-${i}-d2`, `#svc-${i}-d3`],
+          { opacity: 0, filter: "blur(6px)", x: 30 },
+          { opacity: 1, filter: "blur(0px)", x: 0, duration: 0.15, ease: "power4.out", stagger: 0.08 },
+          t0 + 3 * B,
+        );
+        if (k < 3) {
+          tl.to(`#svc-${i}-in`, { x: -1080, filter: "blur(18px)", duration: 0.22, ease: "power3.in" }, t0 + P - 0.22);
+        } else {
+          tl.to(`#svc-${i}-in`, { y: -1920, filter: "blur(18px)", duration: 0.22, ease: "power3.in" }, t0 + P - 0.22);
+        }
+      });
+
+      // 01: the retention graph draws across the level and holds high.
+      const line = document.getElementById("svc-ret-line");
+      const len = 900;
+      line.setAttribute("stroke-dasharray", String(len));
+      tl.fromTo(line, { attr: { "stroke-dashoffset": len } }, { attr: { "stroke-dashoffset": 0 }, duration: 1.6, ease: "power1.inOut" }, B * 1.5);
+      tl.fromTo("#svc-ret-label", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.18, ease: "expo.out" }, B * 4);
+
+      // 02: seven verticals pop in on the 16ths, Monday to Sunday.
+      for (let d = 1; d <= 7; d++) {
+        tl.fromTo(`#svc-ph${d}`, { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "expo.out" }, P + B * 1.2 + (d - 1) * (B / 4));
+      }
+      tl.fromTo("#svc-week", { x: 0 }, { x: -18, duration: 2.6, ease: "power1.inOut" }, P + B);
+
+      // 03: the cut switches camera on every beat; the levels keep moving.
+      [1, 2, 3, 1, 2, 3].forEach((cam, n) => {
+        tl.to(`#svc-cam${cam}`, { borderColor: "#fddf4b", duration: 0.05, ease: "none" }, 2 * P + B * (1 + n));
+        tl.to(`#svc-cam${cam}`, { borderColor: "rgba(244,242,236,0.2)", duration: 0.05, ease: "none" }, 2 * P + B * (2 + n) - 0.05);
+      });
+      for (let w = 1; w <= 14; w++) {
+        const lo = 0.2 + 0.12 * ((w * 5) % 4);
+        const hi = 0.55 + 0.45 * Math.abs(Math.sin(w * 1.9));
+        tl.fromTo(`#svc-pw${w}`, { scaleY: lo }, { scaleY: hi, duration: B / 2, ease: "sine.inOut", yoyo: true, repeat: 5 }, 2 * P + B);
+      }
+
+      // 04: three concepts land, then one is picked as the final art.
+      [1, 2, 3].forEach((n) => {
+        tl.fromTo(`#svc-th${n}`, { y: 60, opacity: 0, rotation: -4 + n * 2 }, { y: 0, opacity: 1, rotation: 0, duration: 0.2, ease: "expo.out" }, 3 * P + B * (1 + (n - 1) * 0.5));
+      });
+      tl.to(["#svc-th1", "#svc-th3"], { opacity: 0.35, scale: 0.94, duration: 0.2, ease: "power2.out" }, 3 * P + B * 4);
+      tl.to("#svc-th2", { scale: 1.12, borderColor: "#f4f2ec", duration: 0.24, ease: "expo.out" }, 3 * P + B * 4);
+
+      function paint() {
+        HOURS.forEach((h, k) => {
+          document.getElementById(`svc-${k + 1}-num`).textContent = `${Math.round(counters[k].v)}H`;
+        });
+      }
+      tl.eventCallback("onUpdate", paint);
+      paint();
+      window.__timelines["services"] = tl;
+    })();
+  </script>
+</template>

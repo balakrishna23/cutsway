@@ -1,0 +1,133 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #fx-canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+    }
+  </style>
+  <!-- A layer over the whole film: embers, kick glow, cut flashes, glitch slices and speed streaks. -->
+  <div id="root" data-composition-id="fx" data-width="1080" data-height="1920">
+    <canvas id="fx-canvas" width="1080" height="1920" data-layout-ignore></canvas>
+  </div>
+  <script>
+    (function () {
+      const W = 1080;
+      const H = 1920;
+      const B = 60 / 128;
+      const DURATION = 30;
+      // Scene cuts (all on the beat grid) and the palette for this film.
+      const CUTS = [3.75, 7.5, 11.25, 15, 18.75, 22.5, 24.375, 26.25];
+      const GLITCH = [3.75, 22.5, 26.25];
+      const COLORS = ["#fddf4b", "#fc8020", "#03c0f4", "#fb3b27", "#f4f2ec"];
+      const LIGHT_SCENES = [];
+
+      const ctx = document.getElementById("fx-canvas").getContext("2d");
+      function mulberry32(a) {
+        return function () {
+          a |= 0;
+          a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      const rnd = mulberry32(7714);
+      const motes = [];
+      for (let i = 0; i < 80; i++) {
+        motes.push({
+          x: rnd() * W,
+          y: rnd() * H,
+          vy: 18 + rnd() * 60,
+          sway: 8 + rnd() * 22,
+          ph: rnd() * 6.28,
+          r: 1.2 + rnd() * 2.8,
+          a: 0.12 + rnd() * 0.35,
+          c: COLORS[Math.floor(rnd() * COLORS.length)],
+        });
+      }
+      const slices = GLITCH.map(() =>
+        Array.from({ length: 9 }, () => ({ y: rnd() * H, h: 6 + rnd() * 40, dx: (rnd() - 0.5) * 140, c: COLORS[Math.floor(rnd() * 4)] })),
+      );
+      const streaks = Array.from({ length: 26 }, () => ({ y: rnd() * H, len: 200 + rnd() * 500, w: 2 + rnd() * 5, off: rnd() }));
+
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        const light = LIGHT_SCENES.some(([a, b]) => t >= a && t < b);
+
+        // Embers drifting up through every scene.
+        ctx.globalCompositeOperation = light ? "source-over" : "lighter";
+        motes.forEach((m) => {
+          const y = (((m.y - m.vy * t) % H) + H) % H;
+          const x = m.x + Math.sin(t * 1.3 + m.ph) * m.sway;
+          ctx.globalAlpha = light ? m.a * 0.5 : m.a;
+          ctx.fillStyle = light ? "#07070a" : m.c;
+          ctx.beginPath();
+          ctx.arc(x, y, m.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Kick glow: the bottom edge breathes on every beat.
+        const sinceBeat = t - Math.floor(t / B) * B;
+        const kick = Math.exp(-sinceBeat / 0.11);
+        if (!light) {
+          const g = ctx.createRadialGradient(540, H + 120, 0, 540, H + 120, 900);
+          g.addColorStop(0, `rgba(252,128,32,${0.22 * kick})`);
+          g.addColorStop(1, "rgba(252,128,32,0)");
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = g;
+          ctx.fillRect(0, H - 900, W, 900);
+        }
+        ctx.globalCompositeOperation = "source-over";
+
+        // Speed streaks in the last beat before each cut.
+        CUTS.forEach((c) => {
+          const k = (t - (c - 0.22)) / 0.22;
+          if (k < 0 || k > 1) return;
+          streaks.forEach((s) => {
+            const x = -s.len + (W + s.len * 2) * ((k + s.off) % 1);
+            ctx.globalAlpha = 0.35 * Math.sin(Math.PI * k);
+            ctx.fillStyle = light ? "#07070a" : "#f4f2ec";
+            ctx.fillRect(x, s.y, s.len, s.w);
+          });
+        });
+
+        // Flash on every cut.
+        CUTS.forEach((c) => {
+          const d = t - c;
+          if (d < 0 || d > 0.16) return;
+          ctx.globalAlpha = 0.42 * Math.exp(-d / 0.045);
+          ctx.fillStyle = "#fffbe8";
+          ctx.fillRect(0, 0, W, H);
+        });
+
+        // Glitch slices on the big drops.
+        GLITCH.forEach((c, gi) => {
+          const d = t - c;
+          if (d < 0 || d > 0.2) return;
+          const step = Math.floor(d / (1 / 30));
+          slices[gi].forEach((s, si) => {
+            if ((si + step) % 3 === 0) return;
+            ctx.globalAlpha = 0.55;
+            ctx.fillStyle = s.c;
+            ctx.fillRect(s.dx * (step % 2 ? 1 : -0.6), s.y, W, s.h);
+          });
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      tl.to({}, { duration: DURATION }, 0);
+      tl.eventCallback("onUpdate", () => draw(tl.time()));
+      draw(0);
+      window.__timelines["fx"] = tl;
+    })();
+  </script>
+</template>

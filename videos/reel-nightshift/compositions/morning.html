@@ -1,0 +1,167 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Archivo";
+      color: #07070a;
+    }
+    #morning-flood {
+      position: absolute;
+      inset: 0;
+      background: #fddf4b;
+      overflow: hidden;
+    }
+    .rays {
+      position: absolute;
+      left: -760px;
+      top: -760px;
+      width: 2600px;
+      height: 2600px;
+      background: repeating-conic-gradient(rgb(255 255 255 / 0.24) 0deg 7deg, rgb(255 255 255 / 0) 7deg 20deg);
+      -webkit-mask: radial-gradient(circle, #000 0%, rgb(0 0 0 / 0.6) 30%, transparent 62%);
+      mask: radial-gradient(circle, #000 0%, rgb(0 0 0 / 0.6) 30%, transparent 62%);
+    }
+
+    .morning-part {
+      position: absolute;
+      inset: 0;
+    }
+    .morning-line {
+      position: absolute;
+      left: 60px;
+      width: 960px;
+      text-align: center;
+      font-weight: 900;
+      font-stretch: 125%;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .morning-line .w {
+      display: inline-block;
+    }
+    #morning-time {
+      top: 500px;
+      font-size: 168px;
+    }
+    #morning-copy {
+      top: 720px;
+      font-size: 92px;
+    }
+    #morning-two {
+      position: absolute;
+      left: 80px;
+      top: 420px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 380px;
+      line-height: 0.87;
+    }
+    #morning-rounds {
+      position: absolute;
+      left: 392px;
+      top: 520px;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 84px;
+      line-height: 0.87;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    #morning-exact {
+      position: absolute;
+      left: 90px;
+      top: 860px;
+      width: 900px;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.15;
+    }
+    #morning-pins {
+      position: absolute;
+      left: 90px;
+      top: 1010px;
+      width: 900px;
+      height: 96px;
+      border-radius: 16px;
+      background: #07070a;
+    }
+    .morning-pin {
+      position: absolute;
+      top: 18px;
+      width: 8px;
+      height: 60px;
+      border-radius: 4px;
+      background: #fddf4b;
+    }
+  </style>
+  <div id="root" data-composition-id="morning" data-width="1080" data-height="1920">
+    <!-- The sunrise floods the frame from where the sun is in the window. -->
+    <div id="morning-flood" class="clip" data-start="0" data-duration="3.75" data-track-index="1">
+      <div id="morning-rays" class="rays" style="left: -566px; top: -786px" data-layout-ignore></div>
+    </div>
+
+    <div id="morning-a" class="morning-part clip" data-start="0" data-duration="1.875" data-track-index="2" data-layout-allow-overflow>
+      <div id="morning-a-in" class="morning-part">
+        <h2 id="morning-time" class="morning-line"><span class="w" id="morning-t">9:00 AM.</span></h2>
+        <h2 id="morning-copy" class="morning-line">
+          <span class="w" id="morning-w1">The first cut</span><br /><span class="w" id="morning-w2">is waiting.</span>
+        </h2>
+      </div>
+    </div>
+
+    <div id="morning-b" class="morning-part clip" data-start="1.875" data-duration="1.875" data-track-index="3" data-layout-allow-overflow>
+      <div id="morning-b-in" class="morning-part">
+        <div id="morning-two">2</div>
+        <div id="morning-rounds">Rounds<br />of notes</div>
+        <div id="morning-exact">On every edit, left on the exact frame.</div>
+        <div id="morning-pins">
+          <div class="morning-pin" id="morning-p1" style="left: 180px"></div>
+          <div class="morning-pin" id="morning-p2" style="left: 470px"></div>
+          <div class="morning-pin" id="morning-p3" style="left: 720px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const B = 60 / 128;
+      const tl = gsap.timeline({ paused: true });
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+      tl.fromTo("#morning-rays", { rotation: 0 }, { rotation: 38, duration: 3.75, ease: "none" }, 0);
+      punch("#morning-t", [0.28 + 2 * B, 0.28 + 3 * B], 0.06);
+      punch("#morning-two", [1.875 + B, 1.875 + 2 * B, 1.875 + 3 * B], 0.07);
+      tl.fromTo(
+        "#morning-flood",
+        { clipPath: "circle(0% at 68% 27%)" },
+        { clipPath: "circle(150% at 68% 27%)", duration: 0.42, ease: "power2.inOut" },
+        0,
+      );
+      tl.fromTo("#morning-t", { opacity: 0, filter: "blur(8px)", scale: 1.2 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.2, ease: "expo.out" }, 0.28);
+      tl.fromTo(["#morning-w1", "#morning-w2"], { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power4.out", stagger: 0.1 }, B + 0.1);
+      tl.to("#morning-a-in", { y: -200, opacity: 0, filter: "blur(14px)", duration: 0.18, ease: "power3.in" }, 1.875 - 0.18);
+
+      tl.fromTo("#morning-b-in", { y: 220, opacity: 0, filter: "blur(14px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.24, ease: "expo.out" }, 1.875);
+      tl.fromTo("#morning-exact", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out" }, 1.875 + B * 0.6);
+      [1, 2, 3].forEach((n) => {
+        tl.fromTo(`#morning-p${n}`, { scaleY: 0 }, { scaleY: 1, duration: 0.14, ease: "expo.out" }, 1.875 + B * (0.5 * n + 0.5));
+      });
+      tl.to("#morning-b-in", { x: -1080, filter: "blur(16px)", duration: 0.2, ease: "power3.in" }, 3.75 - 0.2);
+      window.__timelines["morning"] = tl;
+    })();
+  </script>
+</template>

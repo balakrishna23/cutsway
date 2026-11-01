@@ -1,0 +1,161 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("assets/fonts/archivo-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #07070a;
+      font-family: "Archivo";
+    }
+    #cta-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(520px 420px at 12% 104%, rgb(28 76 221 / 0.34), transparent 70%),
+        radial-gradient(560px 380px at 50% 106%, rgb(107 93 18 / 0.3), transparent 70%),
+        radial-gradient(520px 420px at 90% 104%, rgb(251 59 39 / 0.26), transparent 70%);
+    }
+    #cta-send {
+      position: absolute;
+      left: 60px;
+      width: 960px;
+      top: 400px;
+      text-align: center;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 128px;
+      line-height: 0.87;
+      letter-spacing: -0.012em;
+      text-transform: uppercase;
+      color: #f4f2ec;
+      white-space: nowrap;
+    }
+    #cta-send .w {
+      display: inline-block;
+    }
+    #cta-mark {
+      position: absolute;
+      left: 90px;
+      top: 740px;
+      width: 900px;
+      height: 112.5px;
+    }
+    #cta-ghost,
+    #cta-sweep {
+      position: absolute;
+      inset: 0;
+      -webkit-mask: url("assets/brand/logo.svg") center / 100% 100% no-repeat;
+      mask: url("assets/brand/logo.svg") center / 100% 100% no-repeat;
+    }
+    #cta-ghost {
+      background: #f4f2ec;
+    }
+    #cta-fill {
+      position: absolute;
+      inset: 0;
+      width: 900px;
+      height: 112.5px;
+    }
+    #cta-sweep {
+      overflow: hidden;
+    }
+    #cta-band {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background: linear-gradient(90deg, rgb(255 255 255 / 0), rgb(255 255 255 / 0.85) 50%, rgb(255 255 255 / 0));
+    }
+    #cta-head {
+      position: absolute;
+      left: 88px;
+      top: 716px;
+      width: 4px;
+      height: 160px;
+      background: #f4f2ec;
+    }
+    #cta-url {
+      position: absolute;
+      left: 90px;
+      width: 900px;
+      top: 932px;
+      text-align: center;
+      font-weight: 800;
+      font-stretch: 110%;
+      font-size: 96px;
+      line-height: 1;
+      color: #f4f2ec;
+    }
+    #cta-line {
+      position: absolute;
+      left: 240px;
+      top: 1044px;
+      width: 600px;
+      height: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #272ed2, #1c4cdd 7.1%, #108ae8 14.3%, #03c0f4 21.4%, #5ae2e8 28.6%, #a9f0dc 35.7%, #e8f8cd 42.9%, #fcf397 50%, #fddf4b 57.1%, #fcb51c 64.3%, #fc8020 71.4%, #fb3b27 78.6%, #e21c2f 85.7%, #a81d30 92.9%, #761a2b);
+    }
+    #cta-phone {
+      position: absolute;
+      left: 90px;
+      width: 900px;
+      top: 1092px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 52px;
+      color: #c4c4d0;
+    }
+    #cta-phone b {
+      font-weight: 800;
+      color: #f4f2ec;
+    }
+  </style>
+  <div id="root" data-composition-id="cta" data-width="1080" data-height="1920">
+    <div id="cta-glow"></div>
+    <h2 id="cta-send" class="clip" data-start="0" data-duration="3.75" data-track-index="1">
+      <span class="w" id="cta-w1">Send us</span><br /><span class="w" id="cta-w2" style="color: #fddf4b">the pile.</span>
+    </h2>
+    <div id="cta-mark" class="clip" data-start="0" data-duration="3.75" data-track-index="2">
+      <div id="cta-ghost"></div>
+      <img id="cta-fill" src="assets/brand/logo.svg" alt="Cutsway" />
+      <div id="cta-sweep" data-layout-allow-overflow><div id="cta-band"></div></div>
+    </div>
+    <div id="cta-head" class="clip" data-start="0" data-duration="1.5" data-track-index="3"></div>
+    <div id="cta-url" class="clip" data-start="0" data-duration="3.75" data-track-index="4">cutsway.com</div>
+    <div id="cta-line" class="clip" data-start="0" data-duration="3.75" data-track-index="5"></div>
+    <div id="cta-phone" class="clip" data-start="0" data-duration="3.75" data-track-index="6">WhatsApp <b>+91 62813 01476</b></div>
+  </div>
+  <script>
+    (function () {
+      const B = 60 / 128;
+      const tl = gsap.timeline({ paused: true });
+      // Beat punch: a quick scale hit that settles, placed on the beat grid.
+      function punch(targets, times, amount, dur) {
+        times.forEach((at) => {
+          tl.fromTo(targets, { scale: 1 + amount }, { scale: 1, duration: dur || 0.22, ease: "power2.out", immediateRender: false }, at);
+        });
+      }
+      punch(["#cta-ghost", "#cta-fill", "#cta-sweep"], [B + 0.5], 0.06, 0.28);
+      punch(["#cta-w1", "#cta-w2"], [2 * B, 4 * B], 0.04);
+      tl.fromTo(["#cta-w1", "#cta-w2"], { opacity: 0, y: 60, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.22, ease: "expo.out", stagger: 0.12 }, 0);
+      // The wordmark renders left to right over its ghost, like an export.
+      tl.fromTo("#cta-ghost", { opacity: 0 }, { opacity: 0.1, duration: 0.15, ease: "power2.out" }, B * 0.8);
+      tl.fromTo("#cta-fill", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "power2.inOut" }, B);
+      tl.fromTo("#cta-head", { x: 0 }, { x: 900, duration: 0.5, ease: "power2.inOut" }, B);
+      tl.fromTo("#cta-head", { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, B);
+      tl.to("#cta-head", { opacity: 0, duration: 0.06, ease: "power2.in" }, B + 0.48);
+      tl.fromTo("#cta-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, B * 2);
+      tl.fromTo("#cta-line", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, B * 2.25);
+      tl.fromTo("#cta-phone", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, B * 3);
+      tl.fromTo("#cta-band", { x: -280 }, { x: 920, duration: 0.55, ease: "power2.inOut" }, B * 4);
+      window.__timelines["cta"] = tl;
+    })();
+  </script>
+</template>
