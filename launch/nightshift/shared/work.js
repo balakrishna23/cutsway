@@ -1,13 +1,13 @@
 // Cutsway's own work, shown inside the worlds: thumbnails and a reel, with their labels.
 // Files sit in one folder; each page passes its path to that folder (it differs between the prototypes and a launch build).
 export const THUMBS = {
-  wealthy: { file: 'thumb-wealthy.jpg', label: '10 Things to Become Wealthy' },
-  stocks: { file: 'thumb-stocks.jpg', label: 'Top 10 Rising Stocks' },
-  creator: { file: 'thumb-creator.jpg', label: 'Day in the Life of a Content Creator' },
-  rawtalks: { file: 'thumb-rawtalks.jpg', label: 'Raw Talks with VK' },
+  wealthy: { file: 'thumb-wealthy.jpg?v=86802c3f', label: '10 Things to Become Wealthy' },
+  stocks: { file: 'thumb-stocks.jpg?v=55b8757f', label: 'Top 10 Rising Stocks' },
+  creator: { file: 'thumb-creator.jpg?v=60238ff9', label: 'Day in the Life of a Content Creator' },
+  rawtalks: { file: 'thumb-rawtalks.jpg?v=c8059422', label: 'Raw Talks with VK' },
   'rawtalks-plain': { file: 'thumb-rawtalks-plain.jpg', label: 'Raw Talks with VK' },
 };
-export const REEL = { file: 'reel-podcast.mp4', small: 'reel-podcast-sm.mp4', label: 'Podcast short', seconds: 11 };
+export const REEL = { file: 'reel-podcast.mp4', small: 'reel-podcast-sm.mp4?v=9db36fb2', label: 'Podcast short', seconds: 11 };
 
 // thumbnails load in the background; an entry is drawable once .ready is true
 export function loadThumbs(dir, keys = Object.keys(THUMBS)) {

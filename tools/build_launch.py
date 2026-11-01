@@ -140,6 +140,13 @@ def build(name):
             im = Image.open(dst / b)
             if im.width > 1280:
                 im.resize((1280, round(im.height * 1280 / im.width)), Image.LANCZOS).convert('RGB').save(dst / b, quality=82, optimize=True, progressive=True)
+    # the work files keep their names when replaced, so work.js asks for them by content hash (same reason as below)
+    work = (dst / 'shared' / 'work.js').read_text(encoding='utf-8')
+    for b in cfg['assets']:
+        if b.startswith('assets/work/'):
+            n = b.rsplit('/', 1)[1]
+            work = work.replace(f"'{n}'", f"'{n}?v={hashlib.md5((dst / b).read_bytes()).hexdigest()[:8]}'")
+    (dst / 'shared' / 'work.js').write_text(work, encoding='utf-8')
 
     html = (src / 'index.html').read_text(encoding='utf-8')
     # './' keeps module imports valid (bare 'shared/x.js' is not a legal import specifier)
@@ -149,7 +156,7 @@ def build(name):
     # the CDN and browsers keep shared files for days: a content hash in each URL makes an update fetch only what changed,
     # and never pairs a new page with an old stylesheet
     for f in SHARED:
-        v = hashlib.md5((PROTO / 'shared' / f).read_bytes()).hexdigest()[:8]
+        v = hashlib.md5((dst / 'shared' / f).read_bytes()).hexdigest()[:8]
         html = re.sub(rf"(\./shared/{re.escape(f)})(?=[\"'])", rf'\g<1>?v={v}', html)
     left = re.findall(r'\.\./[\w/._-]+', html)
     assert not left, f'{name}: paths still point outside the site: {left}'
