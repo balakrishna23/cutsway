@@ -5,6 +5,7 @@ Options -Indexes
 AddType video/mp4 .mp4
 AddType image/svg+xml .svg
 AddType model/gltf-binary .glb
+AddType application/manifest+json .webmanifest
 # one address: https, without www
 <IfModule mod_rewrite.c>
   RewriteEngine On

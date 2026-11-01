@@ -7,15 +7,18 @@ Each output folder is self-contained: index.html at the root, shared/ and assets
 plus robots.txt, sitemap.xml, a 404 page and cache headers. Edit shared/site-config.js in the
 output (or in prototypes/shared before building) to set the booking link, email and socials.
 """
-import re, shutil, sys
+import datetime, html as htmllib, json, re, shutil, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PROTO = ROOT / 'prototypes'
 OUT = ROOT / 'launch'
 DOMAIN = 'https://cutsway.com'
+# IndexNow (Bing, Yandex, Seznam...): proves the site is ours when pinging new URLs; served as /<key>.txt
+INDEXNOW_KEY = '2fb9768b8df264a3b35a01701eda6b17'
 
-SHARED = ['page.css', 'brand.css', 'site-config.js', 'page.js', 'ui.js', 'kit.js', 'brand.js', 'platforms.js', 'work.js', 'favicon.svg', 'logo.svg', 'apple-touch-icon.png']
+SHARED = ['page.css', 'brand.css', 'site-config.js', 'page.js', 'ui.js', 'kit.js', 'brand.js', 'platforms.js', 'work.js',
+          'favicon.svg', 'favicon.ico', 'logo.svg', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest']
 # Cutsway's own work (thumbnails, the reel), shown inside the worlds
 WORK = lambda *names: {f'assets/work/{n}': f'assets/work/{n}' for n in names}
 THUMBS = [f'thumb-{k}.jpg' for k in ('wealthy', 'stocks', 'creator', 'rawtalks', 'rawtalks-plain')]
@@ -67,6 +70,7 @@ Options -Indexes
 AddType video/mp4 .mp4
 AddType image/svg+xml .svg
 AddType model/gltf-binary .glb
+AddType application/manifest+json .webmanifest
 # one address: https, without www
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -96,6 +100,28 @@ AddType model/gltf-binary .glb
 '''
 
 
+def bake_links(html):
+    """Write the profile links from site-config.js into the HTML (page.js sets them too), so crawlers see them without
+    running scripts; profiles left empty are hidden from the start."""
+    cfg = (PROTO / 'shared' / 'site-config.js').read_text(encoding='utf-8')
+    socials = dict(re.findall(r"(\w+): '([^']*)'", re.search(r'socials: \{([^}]*)\}', cfg).group(1)))
+    def one(m):
+        url = socials.get(m.group(1), '')
+        return f'<a data-social="{m.group(1)}" href="{url}" target="_blank" rel="noopener me">' if url else f'<a data-social="{m.group(1)}" href="#" hidden>'
+    return re.sub(r'<a data-social="(\w+)" href="#">', one, html)
+
+
+def add_faq_schema(html):
+    """FAQPage structured data, built from the page's own <details> questions so the two never drift apart."""
+    qa = [(htmllib.unescape(re.sub(r'<[^>]+>', '', q)).strip(), htmllib.unescape(re.sub(r'<[^>]+>', '', a)).strip())
+          for q, a in re.findall(r'<details><summary>(.*?)<svg.*?</summary><p>(.*?)</p></details>', html, re.S)]
+    if not qa:
+        return html
+    data = {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in qa]}
+    return html.replace('</head>', f'<script type="application/ld+json">{json.dumps(data, ensure_ascii=False)}</script>\n</head>', 1)
+
+
 def build(name):
     cfg, src, dst = PAGES[name], PROTO / name, OUT / name
     dst.mkdir(parents=True, exist_ok=True)
@@ -119,6 +145,7 @@ def build(name):
     # './' keeps module imports valid (bare 'shared/x.js' is not a legal import specifier)
     html = html.replace('../shared/', './shared/').replace('../assets/', './assets/')
     html = html.replace('../awwwards/_shared/img/', './assets/img/')
+    html = add_faq_schema(bake_links(html))
     left = re.findall(r'\.\./[\w/._-]+', html)
     assert not left, f'{name}: paths still point outside the site: {left}'
     (dst / 'index.html').write_text(html, encoding='utf-8')
@@ -126,10 +153,14 @@ def build(name):
     (dst / '404.html').write_text(NOT_FOUND, encoding='utf-8')
     (dst / '_headers').write_text(HEADERS, encoding='utf-8')
     (dst / '.htaccess').write_text(HOSTINGER_CONFIG, encoding='utf-8')
+    shutil.copy2(PROTO / 'shared' / 'favicon.ico', dst / 'favicon.ico')   # browsers ask for /favicon.ico whatever the page says
+    (dst / f'{INDEXNOW_KEY}.txt').write_text(INDEXNOW_KEY, encoding='utf-8')
     (dst / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n', encoding='utf-8')
+    # the work shown in the 3D scene is drawn on a canvas, so it is listed here for image search
+    images = ''.join(f'\n    <image:image><image:loc>{DOMAIN}/{b}</image:loc></image:image>' for b in cfg['assets'] if re.search(r'work/thumb-[\w-]+\.jpg$', b))
     (dst / 'sitemap.xml').write_text(
-        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f'  <url><loc>{DOMAIN}/</loc></url>\n</urlset>\n', encoding='utf-8')
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+        f'  <url><loc>{DOMAIN}/</loc><lastmod>{datetime.date.today().isoformat()}</lastmod>{images}\n  </url>\n</urlset>\n', encoding='utf-8')
     size = sum(p.stat().st_size for p in dst.rglob('*') if p.is_file())
     print(f'{name}: {dst} ({size / 1024:.0f} KB)')
 
